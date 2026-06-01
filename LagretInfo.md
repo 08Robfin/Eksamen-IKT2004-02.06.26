@@ -21,3 +21,13 @@ CREATE TABLE elev (
 # Mal for å legge til i tabell
 ## https://tangen-2it-utvikling.netlify.app/content/database-01#/20 | 01. 06. 2026
 INSERT INTO elev (navn, alder) VALUES ('Ola Tveiten', 19);
+
+# Handelnettsider for utstyr
+## Komplett
+https://www.komplettbedrift.no/
+
+## Dustin
+https://www.dustin.no/
+
+## Atea eShop
+https://www.atea.no/eshop/
