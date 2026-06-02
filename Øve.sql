@@ -1,5 +1,6 @@
 -- Active: 1780301192033@@127.0.0.1@5432@postgres
--- Kilde for begge spørringene er hentet fra: https://tangen-2it-utvikling.netlify.app/content/database-01# | 01. 06. 26
+
+-- Begge de 2 første spørringene er hentet fra: https://tangen-2it-utvikling.netlify.app/content/database-01# | 01. 06. 26
 
 CREATE TABLE elev (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -9,5 +10,5 @@ CREATE TABLE elev (
 
 INSERT INTO elev (navn, alder) VALUES ('Ola Tveiten', 19);
 
--- Spørring for å hent eut elever
+-- Spørring for å hente ut elever
 SELECT * FROM elev;
