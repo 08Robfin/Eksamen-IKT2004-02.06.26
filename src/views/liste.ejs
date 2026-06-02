@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Våre produkter</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Våre produkter</h1>
+  <div class="produktliste">
+<% produkter.forEach(produkt => { %>
+      <a class="kort" href="/produkt/<%= produkt.id %>">
+        <h2><%= produkt.produktnavn %></h2>
+        <img style="width: 100px; height: auto;" src="/bilder/<%= produkt.bilde %>" alt="<%= produkt.produktnavn %>">
+        <p><%= produkt.pris %> kr</p>
+      </a>
+    <% }) %>
+  </div>
+</body>
+</html>

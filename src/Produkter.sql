@@ -7,3 +7,8 @@ CREATE TABLE Produkter (
     Bilde VARCHAR(255)
 );
 
+INSERT INTO produkter (Produktnavn, Pris, Beskrivelse, Bilde) VALUES ('Roser', 29.99, 'En bukett med vakre roser, Pakken inneoholder 3 roser.', 'roser.webp');
+
+UPDATE produkter SET Bilde = 'roser.webp' WHERE Produktnavn = 'Roser';
+
+DELETE FROM produkter WHERE Produktnavn = 'Roser';

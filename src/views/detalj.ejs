@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title><%= produkt.produktnavn %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="/">← Tilbake</a>
+  <h1><%= produkt.produktnavn %></h1>
+<img src="/bilder/<%= produkt.bilde %>" alt="<%= produkt.produktnavn %>">
+  <p class="pris"><%= produkt.pris %> kr</p>
+  <p><%= produkt.beskrivelse %></p>
+</body>
+</html>
