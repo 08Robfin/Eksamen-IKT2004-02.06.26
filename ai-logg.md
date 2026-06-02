@@ -360,3 +360,8 @@ Akkurat den URL-en som funket da du testa direkte. 💪
 Det å lese **generert HTML** i nettleseren er den viktigste debugging-vanen du kan lære deg i webutvikling — for den viser deg hva serveren *faktisk* sendte, ikke hva du *trodde* du sendte. Forskjellen mellom de to er der 90% av bugsa lever. 🐛
 
 Si ifra hva `src` faktisk ble, så fikser vi det med en gang hvis det fortsatt er rart.
+
+### Prompt
+ok, nå mangler vi en funksjonell admin side, som kun skal være tiljengelig lokalt. hvordan fikser vi dette?
+
+### Svar

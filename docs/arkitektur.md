@@ -11,3 +11,5 @@ Det er brukt pakkene express, pg, og ejs. Express brukes til å lage rutene og �
 
 Det er blitt lagt til en gitignore fil så npm ikke følger med til github, dette kan lastes ned igjen med ```npm install express pg ejs```
 
+## Web-server
+Web-serveren som blir brukt er bare å serve filen med node, ikke bra nok for en ekte bedriftsløsning, men fungerer til å teste og jobbe med det. I den virkelige verden ville jeg brukt en server som kjører, f. eks NGINX.
