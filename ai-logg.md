@@ -1,6 +1,6 @@
 # KI-Logg
 
-## Chat 1
+## Chat 1 (Claude opus 4.8)
 ### Prompt
 Jeg har fått en oppgave og jeg er veldig lost på utvikling delen, jeg vil at du skal hjelpe meg med den, også forklare så jeg får en stor grad forståelse og ikke bare at du gjør det.
 
