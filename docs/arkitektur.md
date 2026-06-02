@@ -4,7 +4,7 @@
 ![Tabell](./bilder/ProdukterTabell.png)
 
 ## Database
-Databasen er satt opp som en docker container, denne containeren fungerer fint fordi den kan lettes sendes rundt og vil virke på alle maskiner. Det er en Postgres container på port 5432. Denne bør settes opp på en server som er 24/7 og passordet burde endres og fjernes fra kildekoden. Databasen har en tabell, denne tabellen, er produkter, på bildet over denne teksten kan du se hva som er i den tabellen.
+Databasen er satt opp som en docker container, denne containeren fungerer fint fordi den kan lettes sendes rundt og vil virke på alle maskiner. Det er en Postgres container på port 5432. Denne bør settes opp på en server som er 24/7 og passordet burde endres og fjernes fra kildekoden. Databasen har en tabell, denne tabellen, er produkter, på bildet over denne teksten kan du se hva som er i den tabellen. Jeg ser ikke noe behov for flere tabeller, mne om det skal bli kunde registrering senere må det bygges opp flere tabeller. Det kan også lages en bestillinger tabell om ansatte skal kunne logge segg inn og se bestillinger.
 
 ## NPM pakker
 NPM pakker er pakker med kode som gjør ting. dette kan lett implementeres i din egen kode, og gjør prosessen mye enkelere. 
