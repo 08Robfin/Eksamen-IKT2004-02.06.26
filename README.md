@@ -10,7 +10,7 @@ i tillegg skal det være en frontend for kunder, der de kan se listen over produ
 Selskapet ønsker åm drifte løsningen på sine egne servere. Admin-grensesnittet skal kun være tiljengelig fra datamskiner som står på bedriftens eget nettverk.
 
 ## min oppgave
-Svaret jeg har gitt på oppgaven er en forenklet løsning som fungerer med det jeg kan og har kompetanse til. Jeg har brukt KI til mye av kodingen men jeg viser forståelse for bruk av KI, IDE, og hvordan man setter sammen koden. 
+Svaret jeg har gitt på oppgaven er en forenklet løsning som fungerer med det jeg kan og har kompetanse til. Jeg har brukt KI til mye av kodingen men jeg viser forståelse for bruk av KI, IDE, og hvordan man setter sammen koden. Oppgaven er en veldig utviklingsbasert oppgave, og dette er ikke min spesialitet, i løpet av oppgaven vil jeg prøve å lære og å få så stor forståelse som mulig. Jeg føler jeg har kontroll på hvordan webservere, docker, og markdown filer virker, og jeg føler jeg har god kontroll på brukerstøtte delene.
 
 ## Beskrivelse av filer
 ### ai-logg.md
