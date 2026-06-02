@@ -365,3 +365,182 @@ Si ifra hva `src` faktisk ble, så fikser vi det med en gang hvis det fortsatt e
 ok, nå mangler vi en funksjonell admin side, som kun skal være tiljengelig lokalt. hvordan fikser vi dette?
 
 ### Svar
+To jobber her: først gjøre admin-sida **funksjonell** (CRUD), så **låse døra** så bare bedriftens nett slipper inn. La oss ta dem i rekkefølge. 🔐
+
+## Den nye ideen: skjemaer sender data TILBAKE
+
+Hittil har serveren bare *sendt ut* HTML (`GET`). Nå skal nettleseren *sende inn* data — når noen fyller ut et skjema og trykker "Lagre". Det gjør den med **`POST`**.
+
+Tommelfingerregel: **`GET` = hente/vise** (les), **`POST` = endre noe** (skriv).
+
+For at Express skal kunne lese skjemadata, legg til denne linja øverst i `server.js` (rett under `app.use(express.static(...))`):
+
+```js
+app.use(express.urlencoded({ extended: true })); // les skjemadata inn i req.body
+```
+
+Glemmer du denne, blir `req.body` `undefined` — klassisk bug som tar folk en time å finne. 🐛
+
+## CRUD-rutene — i `server.js`
+
+CRUD = **C**reate, **R**ead, **U**pdate, **D**elete. Her er alle:
+
+```js
+// ===== ADMIN =====
+
+// READ: liste med rediger/slett-knapper
+app.get('/admin', async (req, res) => {
+  const r = await pool.query('SELECT * FROM produkter ORDER BY id');
+  res.render('admin/liste', { produkter: r.rows });
+});
+
+// Vis tomt skjema for nytt produkt
+app.get('/admin/ny', (req, res) => {
+  res.render('admin/skjema', { produkt: null });
+});
+
+// CREATE: lagre nytt produkt
+app.post('/admin/ny', async (req, res) => {
+  const { produktnavn, pris, beskrivelse, bilde } = req.body;
+  await pool.query(
+    'INSERT INTO produkter (produktnavn, pris, beskrivelse, bilde) VALUES ($1, $2, $3, $4)',
+    [produktnavn, pris, beskrivelse, bilde]
+  );
+  res.redirect('/admin');
+});
+
+// Vis forhåndsfylt skjema for redigering
+app.get('/admin/:id/rediger', async (req, res) => {
+  const r = await pool.query('SELECT * FROM produkter WHERE id = $1', [req.params.id]);
+  res.render('admin/skjema', { produkt: r.rows[0] });
+});
+
+// UPDATE: lagre endringer
+app.post('/admin/:id/rediger', async (req, res) => {
+  const { produktnavn, pris, beskrivelse, bilde } = req.body;
+  await pool.query(
+    'UPDATE produkter SET produktnavn=$1, pris=$2, beskrivelse=$3, bilde=$4 WHERE id=$5',
+    [produktnavn, pris, beskrivelse, bilde, req.params.id]
+  );
+  res.redirect('/admin');
+});
+
+// DELETE: slett produkt
+app.post('/admin/:id/slett', async (req, res) => {
+  await pool.query('DELETE FROM produkter WHERE id = $1', [req.params.id]);
+  res.redirect('/admin');
+});
+```
+
+Tre ting verdt å skjønne:
+- **`const { produktnavn, pris } = req.body`** — `name`-attributtet på hvert input-felt blir nøkkelen her. Et `<input name="pris">` havner i `req.body.pris`.
+- **`$1, $2, ...`** — samme parameterisering som før. Aldri lim brukerinput rett inn i SQL. 🛡️
+- **`res.redirect('/admin')`** — etter en `POST` sender vi brukeren tilbake til lista. Dette kalles **Post/Redirect/Get** og hindrer at en sideoppdatering sender skjemaet på nytt (så du ikke får 5 roser igjen 😅).
+
+## Malene
+
+Lag mappa `views/admin/`. Først `views/admin/liste.ejs`:
+
+```html
+<!DOCTYPE html>
+<html lang="no">
+<head><meta charset="UTF-8"><title>Admin</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <h1>Admin: produkter</h1>
+  <a href="/admin/ny">+ Nytt produkt</a>
+  <table>
+    <tr><th>Navn</th><th>Pris</th><th></th></tr>
+    <% produkter.forEach(produkt => { %>
+      <tr>
+        <td><%= produkt.produktnavn %></td>
+        <td><%= produkt.pris %> kr</td>
+        <td>
+          <a href="/admin/<%= produkt.id %>/rediger">Rediger</a>
+          <form method="POST" action="/admin/<%= produkt.id %>/slett" style="display:inline">
+            <button type="submit">Slett</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</body>
+</html>
+```
+
+**Roast-tid** 😏: se at "Slett" er en `<form method="POST">` og ikke en vanlig `<a>`-lenke? Det MÅ den være. Lenker er `GET`, og du skal **aldri slette data med en GET-forespørsel** — en nettleser-prefetch eller en crawler kan da slette hele databasen din helt av seg selv bare ved å "besøke" lenka. Endringer = `POST`. Alltid. 💀
+
+Så `views/admin/skjema.ejs` — **ett skjema** som funker for både opprett OG rediger (smart gjenbruk):
+
+```html
+<!DOCTYPE html>
+<html lang="no">
+<head><meta charset="UTF-8"><title>Produkt</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <a href="/admin">← Tilbake</a>
+  <h1><%= produkt ? 'Rediger produkt' : 'Nytt produkt' %></h1>
+
+  <form method="POST" action="<%= produkt ? '/admin/' + produkt.id + '/rediger' : '/admin/ny' %>">
+    <label>Navn
+      <input name="produktnavn" value="<%= produkt ? produkt.produktnavn : '' %>" required>
+    </label>
+    <label>Pris
+      <input name="pris" type="number" step="0.01" value="<%= produkt ? produkt.pris : '' %>" required>
+    </label>
+    <label>Beskrivelse
+      <textarea name="beskrivelse"><%= produkt ? produkt.beskrivelse : '' %></textarea>
+    </label>
+    <label>Bildefilnavn
+      <input name="bilde" value="<%= produkt ? produkt.bilde : '' %>" placeholder="roser.webp">
+    </label>
+    <button type="submit">Lagre</button>
+  </form>
+</body>
+</html>
+```
+
+Trikset: er `produkt` `null` → tomt skjema som poster til `/admin/ny`. Er det fylt → forhåndsutfylt skjema som poster til `/admin/:id/rediger`. Én fil, to jobber. 🎯
+
+## Nå: lås døra 🔒
+
+Admin funker nå — men hvem som helst på internett kan nå den. Vi lager en **middleware**: en liten "vakt" som kjører FØR admin-rutene og sjekker hvor forespørselen kommer fra.Legg denne funksjonen i `server.js`:
+
+```js
+function kunLokaltNett(req, res, next) {
+  const ip = req.ip; // f.eks. ::1, 127.0.0.1 eller 192.168.1.42
+
+  const erLokal =
+    ip === '::1' ||                      // IPv6 localhost
+    ip === '127.0.0.1' ||                // IPv4 localhost
+    ip.startsWith('::ffff:127.') ||      // IPv4 mappet i IPv6
+    ip.startsWith('192.168.') ||         // privat LAN
+    ip.startsWith('::ffff:192.168.') ||
+    ip.startsWith('10.') ||              // privat LAN
+    ip.startsWith('::ffff:10.');
+
+  if (erLokal) {
+    next(); // alt ok → fortsett til admin-ruta
+  } else {
+    res.status(403).send('Tilgang nektet – admin er kun for bedriftens nett.');
+  }
+}
+```
+
+Og **aktiver den** ved å sette denne linja rett FØR alle admin-rutene:
+
+```js
+app.use('/admin', kunLokaltNett);
+```
+
+Den kjører automatisk for alt som starter med `/admin`. **`next()`** betyr "alt good, gå videre til selve ruta". Dropper du `next()`, stopper forespørselen her. Det er hele middleware-konseptet: en mellomstasjon hver forespørsel må gjennom. 🚦
+
+To viktige ting for deg spesielt:
+
+**Testing:** Når du surfer fra din egen maskin er `req.ip` lik `::1`, så du slipper alltid inn under utvikling. For å *teste at sperra funker*, kan du midlertidig snu logikken (bytt `if (erLokal)` til `if (!erLokal)`) og se at du får **403**. Husk å snu tilbake. 😅
+
+**Når du drifter det på egen server** (med din **nginx proxy manager**-erfaring 👀): da ligger Express bak en reverse proxy, og `req.ip` viser da *proxyens* IP, ikke kundens. Du må da sette `app.set('trust proxy', true)` så Express leser den ekte IP-en fra `X-Forwarded-For`-headeren. Uten det blir ALT sett på som lokalt. Verdt å nevne i oppgaven.
+
+Og den ærlige nyansen som gir deg ekstra poeng: middleware er **ett lag**. Den ordentlige måten å sikre admin på i produksjon er på **nettverksnivå** — firewall-regler eller å la admin kun lytte på det interne nettverksgrensesnittet, så trafikk utenfra aldri når serveren i det hele tatt. Middleware viser at du forstår prinsippet i kode; firewall er den som faktisk holder skurkene ute. Nevn begge, så viser du dybde. 🧠
+
+---
+
+Det var hele CRUD-en + nettverkssperra. 🔥 Når dette kjører har du faktisk dekket alle fire bulletpointsa i oppgaven. Vil du at vi rydder opp i CSS-en så det ser litt mindre "1998" ut, eller skal vi gå gjennom hva du bør skrive i selve **rapporten/dokumentasjonen**?
