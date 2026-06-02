@@ -12,6 +12,9 @@ Selskapet ønsker åm drifte løsningen på sine egne servere. Admin-grensesnitt
 ## min oppgave
 Svaret jeg har gitt på oppgaven er en forenklet løsning som fungerer med det jeg kan og har kompetanse til. Jeg har brukt KI til mye av kodingen men jeg viser forståelse for bruk av KI, IDE, og hvordan man setter sammen koden. Oppgaven er en veldig utviklingsbasert oppgave, og dette er ikke min spesialitet, i løpet av oppgaven vil jeg prøve å lære og å få så stor forståelse som mulig. Jeg føler jeg har kontroll på hvordan webservere, docker, og markdown filer virker, og jeg føler jeg har god kontroll på brukerstøtte delene.
 
+## funksjonalitet
+Nettsiden fungerer og følger oppgaven. Den har en side for kundene hvor autoatisk alt fra databasen blir vist. Nettsiden har en admin side hvor du lett ved bruk av GUI-en kan legge til og fjerne rader i tabellen. Nettsiden oppfyller kravane til bedriften og har funksjon.
+
 ## Filer laget med KI:
 Her kommer en liste med filer som er laget av KI. Disse filene er de jeg føler jeg har minst kontroll på og de må jeg øve på. Full KI logg kan du finne i ai-logg.md, der vises det tydelig at jeg prøver å fi ki-en til å forklare istedenfor å gi fulle filer. Jeg føler også jeg viser forståelse for bruk av IDE, og hvordan alt knyttes opp til min database, da jeg ikke har kitt KI noe informasjon om min database.
 - liste.ejs
