@@ -30,6 +30,8 @@ app.get('/produkt/:id', async (req, res) => {
 
 // ===== ADMIN =====
 
+app.use('/admin', kunLokaltNett);
+
 // READ: liste med rediger/slett-knapper
 app.get('/admin', async (req, res) => {
   const r = await pool.query('SELECT * FROM produkter ORDER BY id');
