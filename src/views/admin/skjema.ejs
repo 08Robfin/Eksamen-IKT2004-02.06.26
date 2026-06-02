@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="no">
+<head><meta charset="UTF-8"><title>Produkt</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <a href="/admin">← Tilbake</a>
+  <h1><%= produkt ? 'Rediger produkt' : 'Nytt produkt' %></h1>
+
+  <form method="POST" action="<%= produkt ? '/admin/' + produkt.id + '/rediger' : '/admin/ny' %>">
+    <label>Navn
+      <input name="produktnavn" value="<%= produkt ? produkt.produktnavn : '' %>" required>
+    </label>
+    <label>Pris
+      <input name="pris" type="number" step="0.01" value="<%= produkt ? produkt.pris : '' %>" required>
+    </label>
+    <label>Beskrivelse
+      <textarea name="beskrivelse"><%= produkt ? produkt.beskrivelse : '' %></textarea>
+    </label>
+    <label>Bildefilnavn
+      <input name="bilde" value="<%= produkt ? produkt.bilde : '' %>" placeholder="roser.webp">
+    </label>
+    <button type="submit">Lagre</button>
+  </form>
+</body>
+</html>

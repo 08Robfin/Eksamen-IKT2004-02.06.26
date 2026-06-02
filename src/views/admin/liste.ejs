@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="no">
+<head><meta charset="UTF-8"><title>Admin</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <h1>Admin: produkter</h1>
+  <a href="/admin/ny">+ Nytt produkt</a>
+  <table>
+    <tr><th>Navn</th><th>Pris</th><th></th></tr>
+    <% produkter.forEach(produkt => { %>
+      <tr>
+        <td><%= produkt.produktnavn %></td>
+        <td><%= produkt.pris %> kr</td>
+        <td>
+          <a href="/admin/<%= produkt.id %>/rediger">Rediger</a>
+          <form method="POST" action="/admin/<%= produkt.id %>/slett" style="display:inline">
+            <button type="submit">Slett</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</body>
+</html>
