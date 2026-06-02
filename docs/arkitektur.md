@@ -1,7 +1,7 @@
 # Arkitektur
 
 ## Database diagram
-!image[Bilde av tabell](./bilder/ProdukterTabell.png)
+!image[./bilder/ProdukterTabell.png](./bilder/ProdukterTabell.png)
 
 ## Database
 Databasen er satt opp som en docker container, denne containeren fungerer fint fordi den kan lettes sendes rundt og vil virke på alle maskiner. Det er en Postgres container på port 5432.
