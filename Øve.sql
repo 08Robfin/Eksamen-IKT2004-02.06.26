@@ -12,3 +12,5 @@ INSERT INTO elev (navn, alder) VALUES ('Ola Tveiten', 19);
 
 -- Spørring for å hente ut elever
 SELECT * FROM elev;
+
+DELETE FROM elev;
