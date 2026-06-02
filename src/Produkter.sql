@@ -12,3 +12,5 @@ INSERT INTO produkter (Produktnavn, Pris, Beskrivelse, Bilde) VALUES ('Roser', 2
 UPDATE produkter SET Bilde = 'roser.webp' WHERE Produktnavn = 'Roser';
 
 DELETE FROM produkter WHERE Produktnavn = 'Roser';
+
+SELECT * FROM produkter;
